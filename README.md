@@ -2,9 +2,13 @@
 For test:
 
 admin:
-  account:TestAdmin@gmail.com
- password:TestAdmin123?
+
+account: TestAdmin@gmail.com
+
+ password: TestAdmin123?
 
 comsumer:
- account:test@gmail.com
- password:Test123?
+
+ account: test@gmail.com
+ 
+ password: Test123?
