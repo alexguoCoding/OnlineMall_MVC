@@ -3,12 +3,11 @@ For test:
 
 admin:
 
-account: TestAdmin@gmail.com
+account: admin@dotnetmastery.com
 
- password: TestAdmin123?
-
+ password: Admin123*
 comsumer:
 
- account: test@gmail.com
+ account: comsumer1@gmail.com
  
- password: Test123?
+ password: Consumer123*
