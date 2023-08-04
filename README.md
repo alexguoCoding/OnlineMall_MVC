@@ -1,9 +1,9 @@
 # OnlineMall_MVC
 For test:
 admin:
- TestAdmin@gmail.com
- TestAdmin123?
+  account:TestAdmin@gmail.com
+ password:TestAdmin123?
 
 comsumer:
- test@gmail.com
- Test123?
+ account:test@gmail.com
+ password:Test123?
