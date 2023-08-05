@@ -13,10 +13,10 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = SD.Role_Admin)]
-    public class ConsumerController : Controller
+    public class UserController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public ConsumerController(IUnitOfWork unitOfWork)
+        public UserController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
