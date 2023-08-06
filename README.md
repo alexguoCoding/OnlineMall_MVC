@@ -13,3 +13,6 @@ comsumer:
  account: comsumer1@gmail.com
  
  password: Consumer123*
+
+ add-migration new Db
+ update-database
