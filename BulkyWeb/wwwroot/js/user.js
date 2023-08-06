@@ -13,6 +13,7 @@ function loadDataTable() {
             { "data": "city", "width": "15%" },
             { "data": "state", "width": "15%" },
             { "data": "phoneNumber", "width": "15%" },
+            { "data": "role", "width": "15%" },
         ]
     });
 }
