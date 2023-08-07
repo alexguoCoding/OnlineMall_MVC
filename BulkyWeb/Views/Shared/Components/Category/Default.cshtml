@@ -1,0 +1,7 @@
+﻿@model List<Category>
+
+@foreach (var product in Model)
+{
+
+    <a class="dropdown-item" asp-area="Customer" asp-controller="Home" asp-action="Index" asp-route-CategoryName="@product.Name">@product.Name</a>
+}

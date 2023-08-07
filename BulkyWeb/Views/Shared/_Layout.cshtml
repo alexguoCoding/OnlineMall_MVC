@@ -1,6 +1,7 @@
 ﻿
 @using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
+@model List<Product>
 
 
 <!DOCTYPE html>
@@ -41,9 +42,7 @@
                    
                             <ul class="dropdown-menu">
                                 <li class="nav-item">
-                                    <a class="dropdown-item" asp-area="Customer" asp-controller="Home" asp-action="Index" asp-route-CategoryName="Math">Math</a>
-                                    <a class="dropdown-item" asp-area="Customer" asp-controller="Home" asp-action="Index" asp-route-CategoryName="Physic">Physic</a>
-                                    <a class="dropdown-item" asp-area="Customer" asp-controller="Home" asp-action="Index" asp-route-CategoryName="History">History</a>
+                                    @await Component.InvokeAsync("Category")
                                 </li>
 
                             </ul>
