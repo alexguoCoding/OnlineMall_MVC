@@ -18,7 +18,7 @@ namespace BulkyBookWeb.ViewComponents
         {
 
           
-                return View(_unitOfWork.Category.GetAll());
+                return View(_unitOfWork.Category.GetAll().ToList());
 
         }
 
