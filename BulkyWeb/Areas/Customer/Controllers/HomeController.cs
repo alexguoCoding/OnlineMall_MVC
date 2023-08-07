@@ -4,6 +4,7 @@ using BulkyBook.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Security.Claims;
 
@@ -21,12 +22,22 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string CategoryName)
         {
-            
+
+
             IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties: "Category");
+            // 
+            if (!string.IsNullOrEmpty(CategoryName))
+            {
+                productList = productList.Where(x => x.Category.Name == CategoryName).ToList();
+
+            }
+
+
             return View(productList);
         }
+
 
         public IActionResult Details(int productId)
         {
