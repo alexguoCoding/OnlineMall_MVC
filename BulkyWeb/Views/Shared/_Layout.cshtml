@@ -29,6 +29,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
+  
                             <a class="nav-link" asp-area="Customer" asp-controller="Home" asp-action="Index">Mall</a>
                         </li>
                         <li class="nav-item dropdown">
@@ -48,6 +49,27 @@
 
 
                         </li>
+
+                        @if (User.IsInRole(SD.Role_Customer))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Personal Center
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-area="Customer" asp-controller="PersonalInformation" asp-action="Index">Personal Information</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">Payment History</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">Purchase Points</a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                        }
 
                         @if (User.IsInRole(SD.Role_Admin))
                         {
@@ -79,7 +101,7 @@
                                 </ul>
                             </li>
                         }
-                       
+           
                      @if (User.IsInRole(SD.Role_Customer))
                         {
                             <li class="nav-item">
