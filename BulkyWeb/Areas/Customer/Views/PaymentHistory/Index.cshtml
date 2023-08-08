@@ -1,0 +1,52 @@
+﻿@model List<OrderVM>
+
+<div class="row pb-3">
+
+    <div class="border p-3 mt-4">
+        <div class="row pb-2  text-center">
+            <h2 class="text-primary">PaymentHistory</h2>
+
+        </div>
+
+
+    </div>
+  
+    
+    
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">OrderDate</th>
+            <th scope="col">OrderTotal</th>
+            <th scope="col">OrderDetail</th>
+
+        </tr>
+    </thead>
+    <tbody>
+     @foreach (var x in Model)
+      {
+        <tr>
+                <td scope="row"> @x.OrderHeader.OrderDate</td>
+                <td> @x.OrderHeader.OrderTotal</td>
+                
+                <td>
+                    <table class="table table-bordered">
+
+                        @foreach (var y in x.OrderDetail)
+                        {
+                        <tr>
+                                <td> @y.Product.Title</td>
+                                <td>@y.Count</td>
+ 
+                        </tr>
+                        }
+                    </table>
+                </td>
+                 
+          
+        </tr>
+            }
+
+    </tbody>
+</table>
