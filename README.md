@@ -17,5 +17,5 @@ comsumer:
  add-migration new Db
  update-database
  Database :
- ```add-migration seed
-`````update-database
+add-migration seed
+update-database
