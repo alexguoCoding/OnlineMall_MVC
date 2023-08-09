@@ -14,8 +14,7 @@ comsumer:
  
  password: Consumer123*
 
- add-migration new Db
- update-database
+
  Database:
 add-migration seed
 update-database
