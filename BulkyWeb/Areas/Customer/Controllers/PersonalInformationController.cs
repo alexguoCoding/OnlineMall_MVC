@@ -1,4 +1,5 @@
-﻿using BulkyBook.DataAccess.Repository.IRepository;
+﻿using BulkyBook.DataAccess.Repository;
+using BulkyBook.DataAccess.Repository.IRepository;
 using BulkyBook.Models;
 using BulkyBook.Models.ViewModels;
 using BulkyBook.Utility;
@@ -31,7 +32,13 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser Info = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
             PurchasePoint check = _unitOfWork.PurchasePoint.Get(u => u.ApplicationUserId == userId);
-
+            if(check == null) {
+                check = new PurchasePoint();
+                check.ApplicationUserId = userId;
+                check.Point =0;
+                _unitOfWork.PurchasePoint.Add(check);
+            }
+            _unitOfWork.Save();
             ComsumerInfoVM Vm= new ComsumerInfoVM();
             Vm.ApplicationUser = Info;
             Vm.PurchasePoint = check;
