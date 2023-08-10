@@ -1,4 +1,4 @@
-﻿@model ApplicationUser
+﻿@model ComsumerInfoVM
 
 <div class="row pb-3">
 
@@ -8,12 +8,12 @@
             <hr />
         </div>
         <div class="row pb-2">
-            <p><strong>Name:</strong> @Model.Name</p>
-            <p><strong>StreetAddress:</strong> @Model.StreetAddress</p>
-            <p><strong>City:</strong> @Model.City</p>
-            <p><strong>State:</strong> @Model.State</p>
-            <p><strong>PostalCode:</strong> @Model.PostalCode</p>
-            <p><strong>Purchase Points:</strong> 0</p>
+            <p><strong>Name:</strong> @Model.ApplicationUser.Name</p>
+            <p><strong>StreetAddress:</strong> @Model.ApplicationUser.StreetAddress</p>
+            <p><strong>City:</strong> @Model.ApplicationUser.City</p>
+            <p><strong>State:</strong> @Model.ApplicationUser.State</p>
+            <p><strong>PostalCode:</strong> @Model.ApplicationUser.PostalCode</p>
+            <p><strong>Purchase Points:</strong>@Model.PurchasePoint.Point</p>
             
         </div>
         

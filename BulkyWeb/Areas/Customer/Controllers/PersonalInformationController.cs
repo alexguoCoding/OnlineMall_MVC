@@ -1,5 +1,6 @@
 ﻿using BulkyBook.DataAccess.Repository.IRepository;
 using BulkyBook.Models;
+using BulkyBook.Models.ViewModels;
 using BulkyBook.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -29,10 +30,14 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser Info = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
+            PurchasePoint check = _unitOfWork.PurchasePoint.Get(u => u.ApplicationUserId == userId);
+
+            ComsumerInfoVM Vm= new ComsumerInfoVM();
+            Vm.ApplicationUser = Info;
+            Vm.PurchasePoint = check;
 
 
-
-            return View(Info);
+            return View(Vm);
         }
 
 
