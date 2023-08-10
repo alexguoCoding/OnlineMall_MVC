@@ -36,7 +36,15 @@ namespace BulkyBookWeb.Areas.Customer.Controllers {
                 cart.Price = GetPriceBasedOnQuantity(cart);
                 ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
             }
-
+            PurchasePoint PurchasePoint = _unitOfWork.PurchasePoint.Get(u => u.ApplicationUserId == userId);
+            if (PurchasePoint == null)
+            {
+                PurchasePoint = new PurchasePoint();
+                PurchasePoint.ApplicationUserId = userId;
+                PurchasePoint.Point = 0;
+            }
+            ShoppingCartVM.PurchasePoint = PurchasePoint;
+            _unitOfWork.Save();
             return View(ShoppingCartVM);
         }
 
@@ -65,6 +73,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers {
                 cart.Price = GetPriceBasedOnQuantity(cart);
                 ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
             }
+
             return View(ShoppingCartVM);
         }
 
