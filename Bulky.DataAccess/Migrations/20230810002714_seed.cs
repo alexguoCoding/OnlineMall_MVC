@@ -268,6 +268,26 @@ namespace BulkyBook.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PurchasePoints",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Point = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PurchasePoints", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PurchasePoints_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ShoppingCarts",
                 columns: table => new
                 {
@@ -420,6 +440,11 @@ namespace BulkyBook.DataAccess.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PurchasePoints_ApplicationUserId",
+                table: "PurchasePoints",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ShoppingCarts_ApplicationUserId",
                 table: "ShoppingCarts",
                 column: "ApplicationUserId");
@@ -450,6 +475,9 @@ namespace BulkyBook.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "OrderDetails");
+
+            migrationBuilder.DropTable(
+                name: "PurchasePoints");
 
             migrationBuilder.DropTable(
                 name: "ShoppingCarts");

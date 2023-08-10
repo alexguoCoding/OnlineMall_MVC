@@ -167,11 +167,28 @@ namespace BulkyBookWeb.Areas.Customer.Controllers {
                 HttpContext.Session.Clear();
 
 			}
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            PurchasePoint check = _unitOfWork.PurchasePoint.Get(u => u.ApplicationUserId == userId);
+            if (check == null)
+            {
+                check = new PurchasePoint();
+                check.ApplicationUserId = userId;
+                check.Point = (int)orderHeader.OrderTotal;
+                _unitOfWork.PurchasePoint.Add(check);
 
+            }
+            else
+            {
+                check.Point = (int)(check.Point + orderHeader.OrderTotal);
+                _unitOfWork.PurchasePoint.Update(check);
+
+            }
             List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart
                 .GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
 
             _unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
+
             _unitOfWork.Save();
 
 			return View(id);

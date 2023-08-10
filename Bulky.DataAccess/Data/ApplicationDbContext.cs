@@ -19,6 +19,7 @@ namespace BulkyBook.DataAcess.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<OrderHeader> OrderHeaders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<PurchasePoint> PurchasePoints { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,6 +31,7 @@ namespace BulkyBook.DataAcess.Data
                 new Category { Id = 2, Name = "Physic", DisplayOrder = 2 },
                 new Category { Id = 3, Name = "History", DisplayOrder = 3 }
                 );
+
 
             modelBuilder.Entity<Company>().HasData(
                 new Company { Id = 1, Name = "Tech Solution", StreetAddress="123 Tech St", City="Tech City",
