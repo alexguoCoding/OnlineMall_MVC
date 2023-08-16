@@ -20,6 +20,7 @@ namespace BulkyBook.Models {
 
 
         public int Point { get; set; }
+        public int UsedPoint { get; set; }
 
 
     }

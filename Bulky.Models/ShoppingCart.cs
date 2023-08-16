@@ -25,5 +25,7 @@ namespace BulkyBook.Models {
 
 		[NotMapped]
 		public double Price { get; set; }
-	}
+        [NotMapped]
+        public double Point { get; set; }
+    }
 }

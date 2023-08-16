@@ -36,14 +36,19 @@ namespace BulkyBookWeb.Areas.Customer.Controllers {
                 cart.Price = GetPriceBasedOnQuantity(cart);
                 ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
             }
+          
             PurchasePoint PurchasePoint = _unitOfWork.PurchasePoint.Get(u => u.ApplicationUserId == userId);
             if (PurchasePoint == null)
             {
                 PurchasePoint = new PurchasePoint();
                 PurchasePoint.ApplicationUserId = userId;
                 PurchasePoint.Point = 0;
+                PurchasePoint.UsedPoint = 0;
             }
+       
             ShoppingCartVM.PurchasePoint = PurchasePoint;
+
+            ShoppingCartVM.OrderHeader.OrderTotal = ShoppingCartVM.OrderHeader.OrderTotal - ShoppingCartVM.PurchasePoint.UsedPoint;
             _unitOfWork.Save();
             return View(ShoppingCartVM);
         }
@@ -66,22 +71,25 @@ namespace BulkyBookWeb.Areas.Customer.Controllers {
             ShoppingCartVM.OrderHeader.City = ShoppingCartVM.OrderHeader.ApplicationUser.City;
             ShoppingCartVM.OrderHeader.State = ShoppingCartVM.OrderHeader.ApplicationUser.State;
             ShoppingCartVM.OrderHeader.PostalCode = ShoppingCartVM.OrderHeader.ApplicationUser.PostalCode;
+			ShoppingCartVM.PurchasePoint= _unitOfWork.PurchasePoint.Get(u=>u.ApplicationUserId == userId);
 
 
 
-            foreach (var cart in ShoppingCartVM.ShoppingCartList) {
+			foreach (var cart in ShoppingCartVM.ShoppingCartList) {
                 cart.Price = GetPriceBasedOnQuantity(cart);
                 ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
             }
+            ShoppingCartVM.OrderHeader.OrderTotal = ShoppingCartVM.OrderHeader.OrderTotal - ShoppingCartVM.PurchasePoint.UsedPoint;
 
-            return View(ShoppingCartVM);
+			return View(ShoppingCartVM);
         }
 
         [HttpPost]
         [ActionName("Summary")]
-		public IActionResult SummaryPOST() {
-			var claimsIdentity = (ClaimsIdentity)User.Identity;
-			var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+        public IActionResult SummaryPOST()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             ShoppingCartVM.ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId,
                 includeProperties: "Product");
@@ -96,8 +104,12 @@ namespace BulkyBookWeb.Areas.Customer.Controllers {
 				cart.Price = GetPriceBasedOnQuantity(cart);
 				ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
 			}
+			ShoppingCartVM.PurchasePoint = _unitOfWork.PurchasePoint.Get(u => u.ApplicationUserId == userId);
 
-            if (applicationUser.CompanyId.GetValueOrDefault() == 0) {
+			ShoppingCartVM.OrderHeader.OrderTotal = ShoppingCartVM.OrderHeader.OrderTotal - ShoppingCartVM.PurchasePoint.UsedPoint;
+
+
+			if (applicationUser.CompanyId.GetValueOrDefault() == 0) {
 				//it is a regular customer 
 				ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
 				ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending;
@@ -183,7 +195,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers {
             {
                 check = new PurchasePoint();
                 check.ApplicationUserId = userId;
-                check.Point = (int)orderHeader.OrderTotal;
+                check.Point = (int)(orderHeader.OrderTotal / 10);
                 _unitOfWork.PurchasePoint.Add(check);
 
             }
@@ -204,9 +216,55 @@ namespace BulkyBookWeb.Areas.Customer.Controllers {
 		}
 
 
-		public IActionResult Plus(int cartId) {
+        public IActionResult PointPlus()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            PurchasePoint PurchasePoint = _unitOfWork.PurchasePoint.Get(u => u.ApplicationUserId == userId);
+            if (PurchasePoint.UsedPoint< PurchasePoint.Point)
+            {
+                PurchasePoint.UsedPoint = PurchasePoint.UsedPoint + 1;
+            }
+       
+            
+            _unitOfWork.PurchasePoint.Update(PurchasePoint);
+            _unitOfWork.Save();
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult PointRemove()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            PurchasePoint PurchasePoint = _unitOfWork.PurchasePoint.Get(u => u.ApplicationUserId == userId);
+
+                PurchasePoint.UsedPoint = 0;
+
+
+
+            _unitOfWork.PurchasePoint.Update(PurchasePoint);
+            _unitOfWork.Save();
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult PointMinus()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            PurchasePoint PurchasePoint = _unitOfWork.PurchasePoint.Get(u => u.ApplicationUserId == userId);
+            if (PurchasePoint.UsedPoint > 0)
+            {
+                PurchasePoint.UsedPoint = PurchasePoint.UsedPoint - 1;
+            }
+
+
+            _unitOfWork.PurchasePoint.Update(PurchasePoint);
+            _unitOfWork.Save();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Plus(int cartId) {
             var cartFromDb = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
             cartFromDb.Count += 1;
+   
             _unitOfWork.ShoppingCart.Update(cartFromDb);
             _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
